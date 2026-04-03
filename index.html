@@ -1377,7 +1377,7 @@ async function findSponsors() {
   try {
     // Strip country suffix (e.g. "Herndon, Virginia, USA" → "Herndon, Virginia")
     const locationForSearch = location.split(',').slice(0,2).join(',').trim();
-    const url = `/.netlify/functions/search?city=${encodeURIComponent(locationForSearch)}`;
+    const url = `/functions/search?city=${encodeURIComponent(locationForSearch)}`;
     console.log('Calling:', url);
     const res = await fetch(url);
     console.log('Response status:', res.status);
