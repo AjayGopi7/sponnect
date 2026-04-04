@@ -7,7 +7,6 @@ export async function onRequest(context) {
   }
 
   try {
-    // Geocode
     const geoRes = await fetch(
       `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(city)}&format=json&limit=1`,
       { headers: { 'User-Agent': 'Sponnect/1.0' } }
@@ -22,8 +21,6 @@ export async function onRequest(context) {
 
     const lat = geoData[0].lat;
     const lon = geoData[0].lon;
-
-    // Overpass
     const query = `[out:json][timeout:25];(node["office"]["name"](around:40000,${lat},${lon});node["shop"]["name"](around:40000,${lat},${lon});node["amenity"~"restaurant|cafe|clinic|bank"]["name"](around:40000,${lat},${lon});way["office"]["name"](around:40000,${lat},${lon}););out tags center 120;`;
 
     const overpassRes = await fetch(
