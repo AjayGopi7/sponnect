@@ -7,7 +7,6 @@ export default {
       if (!city) return new Response('Missing city', { status: 400 });
 
       try {
-        // Geocode
         const geoRes = await fetch(
           `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(city)}&format=json&limit=1`,
           { headers: { 'User-Agent': 'Sponnect/1.0' } }
@@ -23,22 +22,24 @@ export default {
         const lat = geoData[0].lat;
         const lon = geoData[0].lon;
 
-        // Simpler faster query — just offices and shops, small radius, low limit
-        const query = `[out:json][timeout:15];(node["office"]["name"](around:20000,${lat},${lon});node["shop"]["name"](around:20000,${lat},${lon}););out tags 50;`;
+        // Very small query to stay within Worker CPU limits
+        const query = `[out:json][timeout:8];(node["office"]["name"](around:8000,${lat},${lon});node["shop"]["name"](around:8000,${lat},${lon}););out tags 30;`;
+
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 9000);
 
         const overpassRes = await fetch(
           `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`,
-          { headers: { 'User-Agent': 'Sponnect/1.0' } }
+          { signal: controller.signal, headers: { 'User-Agent': 'Sponnect/1.0' } }
         );
+        clearTimeout(timeout);
 
         const text = await overpassRes.text();
         let elements = [];
         try {
           const parsed = JSON.parse(text);
           elements = parsed.elements || [];
-        } catch(e) {
-          console.log('Overpass parse error:', text.slice(0, 100));
-        }
+        } catch(e) {}
 
         return new Response(JSON.stringify({
           lat: parseFloat(lat),
