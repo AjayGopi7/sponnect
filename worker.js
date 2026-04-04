@@ -7,45 +7,56 @@ export default {
       if (!city) return new Response('Missing city', { status: 400 });
 
       try {
+        // Search for different business types in parallel using Nominatim
+        const cityName = city.split(',')[0].trim();
+        
+        const searches = [
+          `office in ${cityName}`,
+          `store in ${cityName}`,
+          `restaurant in ${cityName}`,
+          `bank in ${cityName}`,
+          `clinic in ${cityName}`,
+        ];
+
+        const results = await Promise.all(
+          searches.map(q =>
+            fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=10&addressdetails=0`, {
+              headers: { 'User-Agent': 'Sponnect/1.0' }
+            }).then(r => r.json()).catch(() => [])
+          )
+        );
+
+        // Flatten, deduplicate by name
+        const seen = new Set();
+        const elements = [];
+
+        for (const group of results) {
+          for (const item of group) {
+            const name = item.name || item.display_name?.split(',')[0];
+            if (!name || seen.has(name.toLowerCase())) continue;
+            seen.add(name.toLowerCase());
+            elements.push({
+              lat: parseFloat(item.lat),
+              lon: parseFloat(item.lon),
+              tags: {
+                name,
+                type: item.type,
+                category: item.class,
+              }
+            });
+          }
+        }
+
+        // Get center coords
         const geoRes = await fetch(
           `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(city)}&format=json&limit=1`,
           { headers: { 'User-Agent': 'Sponnect/1.0' } }
         );
         const geoData = await geoRes.json();
+        const lat = geoData[0] ? parseFloat(geoData[0].lat) : 0;
+        const lon = geoData[0] ? parseFloat(geoData[0].lon) : 0;
 
-        if (!geoData || !geoData[0]) {
-          return new Response(JSON.stringify({ lat: 0, lon: 0, elements: [] }), {
-            headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
-          });
-        }
-
-        const lat = geoData[0].lat;
-        const lon = geoData[0].lon;
-
-        // Very small query to stay within Worker CPU limits
-        const query = `[out:json][timeout:8];(node["office"]["name"](around:8000,${lat},${lon});node["shop"]["name"](around:8000,${lat},${lon}););out tags 30;`;
-
-        const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 9000);
-
-        const overpassRes = await fetch(
-          `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`,
-          { signal: controller.signal, headers: { 'User-Agent': 'Sponnect/1.0' } }
-        );
-        clearTimeout(timeout);
-
-        const text = await overpassRes.text();
-        let elements = [];
-        try {
-          const parsed = JSON.parse(text);
-          elements = parsed.elements || [];
-        } catch(e) {}
-
-        return new Response(JSON.stringify({
-          lat: parseFloat(lat),
-          lon: parseFloat(lon),
-          elements
-        }), {
+        return new Response(JSON.stringify({ lat, lon, elements }), {
           headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
         });
 
