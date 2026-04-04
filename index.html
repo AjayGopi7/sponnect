@@ -17,7 +17,7 @@
 <style>
   :root {
     --ink: #0e0e0e;
-    --paper: #f5f0e8;
+    --paper: #f5f0e8; 
     --cream: #ede8dc;
     --gold: #c9a84c;
     --gold-light: #e8cc7e;
@@ -1376,49 +1376,17 @@ async function findSponsors() {
   let usedRealData = false;
 
   try {
-    // Strip country suffix
     const locationForSearch = location.split(',').slice(0,2).join(',').trim();
-    console.log('Searching for:', locationForSearch);
+    console.log('Calling worker for:', locationForSearch);
 
-    // Step 1: Geocode using Nominatim
-    const geoRes = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(locationForSearch)}&format=json&limit=1`, {
-      headers: { 'Accept': 'application/json' }
-    });
-    const geoData = await geoRes.json();
-    console.log('Geo result:', geoData[0]?.display_name);
-    if (!geoData || !geoData[0]) throw new Error('Could not geocode: ' + locationForSearch);
+    const res = await fetch(`/search?city=${encodeURIComponent(locationForSearch)}`);
+    console.log('Response status:', res.status);
+    if (!res.ok) throw new Error('Worker returned ' + res.status);
+    const data = await res.json();
+    console.log('Data received:', data.elements?.length, 'elements');
 
-    const lat = parseFloat(geoData[0].lat);
-    const lon = parseFloat(geoData[0].lon);
-
-    // Step 2: Fetch businesses from Overpass via CORS proxy
-    const query = `[out:json][timeout:25];(node["office"]["name"](around:40000,${lat},${lon});node["shop"]["name"](around:40000,${lat},${lon});node["amenity"~"restaurant|cafe|clinic|bank"]["name"](around:40000,${lat},${lon});way["office"]["name"](around:40000,${lat},${lon}););out tags center 120;`;
-    
-    let overpassData = null;
-
-    // Try multiple proxies in order
-    const proxies = [
-      `https://api.allorigins.win/raw?url=${encodeURIComponent('https://overpass-api.de/api/interpreter?data=' + encodeURIComponent(query))}`,
-      `https://corsproxy.io/?${encodeURIComponent('https://overpass-api.de/api/interpreter?data=' + encodeURIComponent(query))}`,
-      `https://proxy.cors.sh/https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`,
-    ];
-
-    for (const proxyUrl of proxies) {
-      try {
-        console.log('Trying proxy:', proxyUrl.split('?')[0]);
-        const res = await fetch(proxyUrl);
-        if (!res.ok) { console.log('Proxy failed:', res.status); continue; }
-        const text = await res.text();
-        if (!text || text.trim().startsWith('<')) { console.log('Got HTML, skipping'); continue; }
-        overpassData = JSON.parse(text);
-        if (overpassData.elements) { console.log('Proxy worked! Elements:', overpassData.elements.length); break; }
-      } catch(e) { console.log('Proxy error:', e.message); }
-    }
-
-    if (!overpassData || !overpassData.elements) throw new Error('All proxies failed');
-    console.log('Businesses found:', overpassData.elements.length);
-    const elements = overpassData.elements || [];
-    if (elements.length === 0) throw new Error('No businesses found');
+    const { lat, lon, elements } = data;
+    if (!elements || elements.length === 0) throw new Error('No elements');
 
     const seen = new Set();
     const businesses = [];
