@@ -4,3 +4,7 @@ compatibility_date = "2024-01-01"
 
 [assets]
 directory = "."
+
+[[kv_namespaces]]
+binding = "KV"
+id = "99c3e71946db40a3a6fafa8c541ef3cb"
