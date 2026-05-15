@@ -1687,8 +1687,8 @@ async function renderDashboard() {
         const isEmail = a.type === 'email';
         const shortOrg = a.org_name ? (a.org_name.length > 22 ? a.org_name.slice(0,22)+'…' : a.org_name) : 'Someone';
         const text = isEmail
-  ? `<strong>A team</strong> generated an email for <strong>${a.sponsor_name || 'a sponsor'}</strong>`
-  : `<strong>Someone</strong> searched for sponsors in ${a.location ? a.location.split(',')[0] : 'their area'}`;
+  ? `<strong>Email generated</strong> for <strong>${a.sponsor_name || 'a local business'}</strong>`
+  : `<strong>New search</strong> for sponsors in <strong>${a.location ? a.location.split(',')[0] : 'a city'}</strong>`;
         return `
           <div class="activity-item">
             <div class="activity-dot ${isEmail ? '' : 'sage'}"></div>
