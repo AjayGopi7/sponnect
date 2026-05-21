@@ -6,7 +6,6 @@ export default {
     if (url.pathname === '/search') {
       const city = url.searchParams.get('city');
       if (!city) return new Response('Missing city', { status: 400 });
-
       try {
         const cityName = city.split(',')[0].trim();
         const searches = [
@@ -16,7 +15,6 @@ export default {
           `bank in ${cityName}`,
           `clinic in ${cityName}`,
         ];
-
         const results = await Promise.all(
           searches.map(q =>
             fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=10&addressdetails=0`, {
@@ -24,7 +22,6 @@ export default {
             }).then(r => r.json()).catch(() => [])
           )
         );
-
         const seen = new Set();
         const elements = [];
         for (const group of results) {
@@ -39,7 +36,6 @@ export default {
             });
           }
         }
-
         const geoRes = await fetch(
           `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(city)}&format=json&limit=1`,
           { headers: { 'User-Agent': 'Sponnect/1.0' } }
@@ -47,11 +43,9 @@ export default {
         const geoData = await geoRes.json();
         const lat = geoData[0] ? parseFloat(geoData[0].lat) : 0;
         const lon = geoData[0] ? parseFloat(geoData[0].lon) : 0;
-
         return new Response(JSON.stringify({ lat, lon, elements }), {
           headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
         });
-
       } catch(e) {
         return new Response(JSON.stringify({ lat: 0, lon: 0, elements: [], error: e.message }), {
           headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
@@ -59,7 +53,7 @@ export default {
       }
     }
 
-    // ─── STATS ENDPOINT (GET) ──────────────────────────────────
+    // ─── STATS ENDPOINT ────────────────────────────────────────
     if (url.pathname === '/stats' && request.method === 'GET') {
       try {
         const [visits, searches, emails, citiesRaw, activityRaw, orgTypesRaw] = await Promise.all([
@@ -70,7 +64,6 @@ export default {
           env.KV.get('stat:activity'),
           env.KV.get('stat:orgtypes'),
         ]);
-
         return new Response(JSON.stringify({
           visits:   parseInt(visits   || '191'),
           searches: parseInt(searches || '20'),
@@ -89,54 +82,42 @@ export default {
       }
     }
 
-    // ─── TRACK ENDPOINT (POST) ─────────────────────────────────
+    // ─── TRACK ENDPOINT ────────────────────────────────────────
     if (url.pathname === '/track' && request.method === 'POST') {
       try {
         const body = await request.json();
         const { type, org_name, org_type, location, sponsor_name } = body;
-
         if (type === 'visit') {
           const current = parseInt(await env.KV.get('stat:visits') || '191');
           await env.KV.put('stat:visits', String(current + 1));
         }
-
         if (type === 'search') {
           const current = parseInt(await env.KV.get('stat:searches') || '20');
           await env.KV.put('stat:searches', String(current + 1));
-
           if (location) {
             const city = location.split(',')[0].trim();
             const cities = JSON.parse(await env.KV.get('stat:cities') || '[]');
-            if (!cities.includes(city)) {
-              cities.push(city);
-              await env.KV.put('stat:cities', JSON.stringify(cities));
-            }
+            if (!cities.includes(city)) { cities.push(city); await env.KV.put('stat:cities', JSON.stringify(cities)); }
           }
-
           if (org_type) {
             const orgTypes = JSON.parse(await env.KV.get('stat:orgtypes') || '{}');
             orgTypes[org_type] = (orgTypes[org_type] || 0) + 1;
             await env.KV.put('stat:orgtypes', JSON.stringify(orgTypes));
           }
-
           const activity = JSON.parse(await env.KV.get('stat:activity') || '[]');
           activity.unshift({ type: 'search', org_name, location, ts: Date.now() });
           await env.KV.put('stat:activity', JSON.stringify(activity.slice(0, 20)));
         }
-
         if (type === 'email') {
           const current = parseInt(await env.KV.get('stat:emails') || '15');
           await env.KV.put('stat:emails', String(current + 1));
-
           const activity = JSON.parse(await env.KV.get('stat:activity') || '[]');
           activity.unshift({ type: 'email', org_name, sponsor_name, ts: Date.now() });
           await env.KV.put('stat:activity', JSON.stringify(activity.slice(0, 20)));
         }
-
         return new Response(JSON.stringify({ ok: true }), {
           headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
         });
-
       } catch(e) {
         return new Response(JSON.stringify({ error: e.message }), {
           status: 500,
@@ -156,6 +137,22 @@ export default {
       });
     }
 
-    return env.ASSETS.fetch(request);
+    // ─── SERVE HTML WITH SCRIPT INJECTION PROTECTION ───────────
+    const response = await env.ASSETS.fetch(request);
+    const contentType = response.headers.get('content-type') || '';
+
+    if (contentType.includes('text/html')) {
+      let html = await response.text();
+      // Remove any injected scripts from GA or external sources
+      html = html.replace(/<script[^>]+src=["']https?:\/\/(?!fonts\.googleapis\.com)[^"']*["'][^>]*><\/script>/gi, '');
+      html = html.replace(/<script[^>]+src=["']https?:\/\/www\.googletagmanager\.com[^"']*["'][^>]*><\/script>/gi, '');
+      html = html.replace(/gtag\([^)]*\)/g, '');
+      return new Response(html, {
+        status: response.status,
+        headers: response.headers,
+      });
+    }
+
+    return response;
   }
 };
