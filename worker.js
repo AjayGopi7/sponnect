@@ -138,21 +138,41 @@ export default {
     }
 
     // ─── SERVE HTML WITH SCRIPT INJECTION PROTECTION ───────────
-    const response = await env.ASSETS.fetch(request);
-    const contentType = response.headers.get('content-type') || '';
+const response = await env.ASSETS.fetch(request);
+const contentType = response.headers.get('content-type') || '';
 
-    if (contentType.includes('text/html')) {
-      let html = await response.text();
-      // Remove any injected scripts from GA or external sources
-      html = html.replace(/<script[^>]+src=["']https?:\/\/(?!fonts\.googleapis\.com)[^"']*["'][^>]*><\/script>/gi, '');
-      html = html.replace(/<script[^>]+src=["']https?:\/\/www\.googletagmanager\.com[^"']*["'][^>]*><\/script>/gi, '');
-      html = html.replace(/gtag\([^)]*\)/g, '');
-      return new Response(html, {
-        status: response.status,
-        headers: response.headers,
+if (contentType.includes('text/html')) {
+  let html = await response.text();
+  
+  // Strip external scripts
+  html = html.replace(/<script\b[^>]*src=["'][^"']*googletagmanager[^"']*["'][^>]*><\/script>/gi, '');
+  html = html.replace(/<script\b[^>]*src=["'][^"']*google-analytics[^"']*["'][^>]*><\/script>/gi, '');
+  
+  // Strip inline GA scripts
+  html = html.replace(/<script\b[^>]*>[\s\S]*?gtag[\s\S]*?<\/script>/gi, '');
+  html = html.replace(/<script\b[^>]*>[\s\S]*?dataLayer[\s\S]*?<\/script>/gi, '');
+
+  // Inject service worker killer before </body>
+  const swKiller = `
+  <script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then(function(registrations) {
+      registrations.forEach(function(registration) {
+        registration.unregister();
+        console.log('Killed SW:', registration.scope);
       });
-    }
+    });
+  }
+  </script>`;
+  
+  html = html.replace('</body>', swKiller + '</body>');
+  
+  return new Response(html, {
+    status: response.status,
+    headers: response.headers,
+  });
+}
 
-    return response;
+return response;
   }
 };
