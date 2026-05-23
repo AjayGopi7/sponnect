@@ -1031,37 +1031,17 @@
           <option>Other</option>
         </select>
       </div>
-      <div class="form-group">
-        <label>Country</label>
-        <select id="org-country" onchange="updateStates()">
-          <option value="">Select country...</option>
-          <option value="US">United States</option>
-          <option value="CA">Canada</option>
-          <option value="GB">United Kingdom</option>
-          <option value="AU">Australia</option>
-          <option value="OTHER">Other</option>
-        </select>
-        <span style="font-size:0.72rem;color:var(--muted);line-height:1.5;margin-top:0.3rem;">
-          Don't see your country, state, or city? Select <strong style="color:var(--ink)">Other</strong> and type your city manually.
-        </span>
-      </div>
-      <div class="form-group" id="state-group" style="display:none">
-        <label id="state-label">State</label>
-        <select id="org-state" onchange="updateCities()">
-          <option value="">Select state...</option>
-        </select>
-      </div>
-      <div class="form-group" id="city-group" style="display:none">
-        <label>City</label>
-        <select id="org-city" onchange="updateLocationField()">
-          <option value="">Select city...</option>
-        </select>
-      </div>
-      <div class="form-group" id="manual-location-group" style="display:none">
-        <label>City / Region</label>
-        <input type="text" id="org-location-manual" placeholder="Enter your city" oninput="updateLocationFromManual()" />
-      </div>
-      <input type="hidden" id="org-location" />
+      <div class="form-group full">
+  <label>City</label>
+  <input
+    type="text"
+    id="org-location"
+    placeholder="e.g. Los Angeles, San Francisco, New York"
+  />
+  <span style="font-size:0.72rem;color:var(--muted);line-height:1.5;margin-top:0.3rem;">
+    Just type your city — no country or state needed.
+  </span>
+</div>
       <div class="form-group">
         <label>Contact Email</label>
         <input type="email" id="org-email" placeholder="contact@yourorg.org" />
@@ -1151,93 +1131,7 @@ function escapeHTML(str) {
     .replace(/'/g, '&#39;');
 }
 
-// ─── LOCATION DATA NAMESPACE ─────────────────────────────────
-const locationData = {
-  US: {
-    label: 'State',
-    states: {
-      'Alabama': ['Birmingham','Montgomery','Huntsville','Mobile','Tuscaloosa'],
-      'Alaska': ['Anchorage','Fairbanks','Juneau'],
-      'Arizona': ['Phoenix','Tucson','Mesa','Chandler','Scottsdale'],
-      'Arkansas': ['Little Rock','Fort Smith','Fayetteville'],
-      'California': ['Los Angeles','San Francisco','San Diego','San Jose','Sacramento','Irvine','Anaheim'],
-      'Colorado': ['Denver','Colorado Springs','Aurora','Boulder'],
-      'Connecticut': ['Bridgeport','New Haven','Hartford'],
-      'Florida': ['Jacksonville','Miami','Tampa','Orlando','Tallahassee'],
-      'Maryland': ['Baltimore', 'Annapolis', 'Frederick'],
-      'Michigan': ['Lansing', 'Detroit', 'Grand Rapids'],
-      'Missouri': ['Kansas City', 'St. Louis', 'Springfield']
-    }
-  },
-  CA: {
-    label: 'Province',
-    states: {
-      'Alberta': ['Calgary','Edmonton','Red Deer','Lethbridge'],
-      'British Columbia': ['Vancouver','Victoria','Kelowna'],
-      'Ontario': ['Toronto','Ottawa','Mississauga','Hamilton']
-    }
-  }
-};
-
-// ─── UI CONTROLS & EVENT HANDLERS ────────────────────────────
-function updateStates() {
-  const country = document.getElementById('org-country').value;
-  const stateGroup = document.getElementById('state-group');
-  const cityGroup = document.getElementById('city-group');
-  const manualGroup = document.getElementById('manual-location-group');
-  const stateSelect = document.getElementById('org-state');
-  
-  stateSelect.innerHTML = '<option value="">Select option...</option>';
-  
-  if (country === 'OTHER' || !locationData[country]) {
-    stateGroup.style.display = 'none';
-    cityGroup.style.display = 'none';
-    manualGroup.style.display = 'flex';
-    document.getElementById('org-location-manual').value = '';
-    updateLocationFromManual();
-    return;
-  }
-  
-  stateGroup.style.display = 'flex';
-  cityGroup.style.display = 'none';
-  manualGroup.style.display = 'none';
-  document.getElementById('state-label').textContent = locationData[country].label;
-  
-  Object.keys(locationData[country].states).sort().forEach(s => {
-    const opt = document.createElement('option');
-    opt.value = s;
-    opt.textContent = s;
-    stateSelect.appendChild(opt);
-  });
-}
-
-function updateCities() {
-  const country = document.getElementById('org-country').value;
-  const state = document.getElementById('org-state').value;
-  const cityGroup = document.getElementById('city-group');
-  const citySelect = document.getElementById('org-city');
-  
-  citySelect.innerHTML = '<option value="">Select city...</option>';
-  if (!state) { cityGroup.style.display = 'none'; return; }
-  
-  cityGroup.style.display = 'flex';
-  const cities = locationData[country].states[state] || [];
-  cities.sort().forEach(c => {
-    const opt = document.createElement('option');
-    opt.value = `${c}, ${state}, ${country}`;
-    opt.textContent = c;
-    citySelect.appendChild(opt);
-  });
-}
-
-function updateLocationField() {
-  document.getElementById('org-location').value = document.getElementById('org-city').value;
-}
-
-function updateLocationFromManual() {
-  document.getElementById('org-location').value = document.getElementById('org-location-manual').value.trim();
-}
-
+if (!res.ok) throw new Error("Search failed");
 // ─── FETCHER & METRICS RENDERERS ─────────────────────────────
 async function fetchDashboardStats() {
   try {
@@ -1345,11 +1239,14 @@ function renderOrgBreakdown(orgTypes) {
 
 // ─── APP CORE FUNCTIONALITY ──────────────────────────────────
 document.getElementById('find-btn').addEventListener('click', async () => {
-  const city = document.getElementById('org-location').value;
+  const city = document.getElementById('org-location').value.trim().toLowerCase();
   const orgName = document.getElementById('org-name').value;
   const orgType = document.getElementById('org-type').value;
   
-  if (!city) { showToast("Please select or specify a structural target location first."); return; }
+  if (!city.trim()) {
+  showToast("Please enter a city.");
+  return;
+}
   
   const grid = document.getElementById('sponsor-grid');
   document.getElementById('sponsor-results').style.display = 'block';
@@ -1428,6 +1325,14 @@ document.getElementById('gen-btn').addEventListener('click', () => {
     {
       subject: `Sponsorship Support Proposal: ${orgName} + ${selectedSponsor.name}`,
       body: `Hi ${selectedSponsor.name},\n\nWe run ${orgName}, and we are looking to coordinate with impactful market leaders to cross-promote community development structures.\n\nOur current initiatives require support framework matching:\n${desc}\n\nWould you be open to an executive deck alignment presentation this week?\n\nCordially,\nManagement Team\n${orgName}`
+    },
+    {
+      subject: `Local Partnership Inquiry from ${orgName}`,
+      body: `Dear ${selectedSponsor.name} Team,\n\nI hope this message finds you well. My name is [Your Name], and I am reaching out on behalf of ${orgName}, a local ${orgType} dedicated to fostering community growth.\n\nWe are currently seeking partnerships with esteemed local businesses like yours to support our initiatives:\n${desc}\n\nWe believe that a collaboration could be mutually beneficial, and we would love the opportunity to discuss potential partnership opportunities with you.\n\nThank you for considering our proposal. We look forward to the possibility of working together.\n\nBest regards,\n[Your Name]\n${orgName}\n${contactEmail}`
+    },
+    {
+      subject: `Exploring Sponsorship Opportunities with ${orgName}`,
+      body: `Hello ${selectedSponsor.name},\n\nMy name is [Your Name], and I am reaching out from ${orgName}, a local ${orgType} focused on making a positive impact in our community.\n\nWe are currently seeking sponsorship support to help us achieve our goals:\n${desc}\n\nWe would be thrilled to explore potential sponsorship opportunities with your business and discuss how we can work together to create a meaningful partnership.\n\nThank you for your time and consideration. We look forward to the possibility of collaborating with you.\n\nBest regards,\n[Your Name]\n${orgName}\n${contactEmail}`
     }
   ];
   
