@@ -1261,25 +1261,44 @@ function renderActivityFeed(activities) {
   const feed = document.getElementById('activity-feed');
   if (!feed) return;
   if (!activities || activities.length === 0) {
-    feed.innerHTML = '<div class="activity-text" style="color:rgba(245,240,232,0.3)">No recent search vectors recorded.</div>';
+    feed.innerHTML = '<div class="activity-text" style="color:rgba(245,240,232,0.3)">No recent activity recorded.</div>';
     return;
   }
   
   feed.innerHTML = '';
-  activities.forEach(item => {
+  
+  // .slice(0, 5) keeps the layout clean by only rendering the 5 most recent items
+  activities.slice(0, 5).forEach(item => {
     const row = document.createElement('div');
     row.className = 'activity-item';
     
-    const safeOrgName = escapeHTML(item.org_name || 'An organization');
-    const safeLocation = escapeHTML(item.location || 'Unknown Location');
-    const safeSponsor = escapeHTML(item.sponsor_name || '');
-    const timeStr = item.ts ? new Date(item.ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
+    const safeOrgName = escapeHTML(item.org_name || 'Someone');
+    const safeLocation = escapeHTML(item.location || 'Local Area');
+    const safeSponsor = escapeHTML(item.sponsor_name || 'Sponsor');
+    
+    // Calculate relative time (e.g., "20 mins ago")
+    let timeStr = 'Just now';
+    if (item.ts) {
+      const diffMs = Date.now() - new Date(item.ts).getTime();
+      const diffMins = Math.floor(diffMs / 60000);
+      const diffHours = Math.floor(diffMins / 60000 / 60); // Fixed denominator calculation
+      
+      if (diffMins < 1) {
+        timeStr = 'Just now';
+      } else if (diffMins < 60) {
+        timeStr = `${diffMins} min${diffMins > 1 ? 's' : ''} ago`;
+      } else if (diffHours < 24) {
+        timeStr = `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+      } else {
+        timeStr = new Date(item.ts).toLocaleDateString();
+      }
+    }
     
     if (item.type === 'search') {
       row.innerHTML = `
         <div class="activity-dot"></div>
         <div>
-          <div class="activity-text"><strong>${safeOrgName}</strong> matched coordinates near <strong>${safeLocation}</strong></div>
+          <div class="activity-text"><strong>${safeOrgName}</strong> searched for sponsors in <strong>${safeLocation}</strong></div>
           <div class="activity-time">${timeStr}</div>
         </div>
       `;
@@ -1287,7 +1306,7 @@ function renderActivityFeed(activities) {
       row.innerHTML = `
         <div class="activity-dot sage"></div>
         <div>
-          <div class="activity-text"><strong>${safeOrgName}</strong> engineered a pipeline email for <strong>${safeSponsor}</strong></div>
+          <div class="activity-text"><strong>${safeOrgName}</strong> generated an outreach email for <strong>${safeSponsor}</strong></div>
           <div class="activity-time">${timeStr}</div>
         </div>
       `;
