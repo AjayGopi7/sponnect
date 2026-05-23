@@ -1267,26 +1267,28 @@ function renderActivityFeed(activities) {
   
   feed.innerHTML = '';
   
-  // .slice(0, 5) keeps the layout clean by only rendering the 5 most recent items
+  // Keep the list clean by only displaying the top 5 entries
   activities.slice(0, 5).forEach(item => {
     const row = document.createElement('div');
     row.className = 'activity-item';
     
-    const safeOrgName = escapeHTML(item.org_name || 'Someone');
     const safeLocation = escapeHTML(item.location || 'Local Area');
-    const safeSponsor = escapeHTML(item.sponsor_name || 'Sponsor');
+    const safeSponsor = escapeHTML(item.sponsor_name || 'Local Business');
     
-    // Calculate relative time (e.g., "20 mins ago")
+    // High-specificity relative time calculator
     let timeStr = 'Just now';
     if (item.ts) {
       const diffMs = Date.now() - new Date(item.ts).getTime();
-      const diffMins = Math.floor(diffMs / 60000);
-      const diffHours = Math.floor(diffMins / 60000 / 60); // Fixed denominator calculation
+      const diffSecs = Math.floor(diffMs / 1000);
+      const diffMins = Math.floor(diffSecs / 60);
+      const diffHours = Math.floor(diffMins / 60);
       
-      if (diffMins < 1) {
-        timeStr = 'Just now';
+      if (diffSecs < 60) {
+        // Dynamic second tracking so it never says 0 hours or 0 minutes
+        const secs = diffSecs <= 0 ? 1 : diffSecs;
+        timeStr = `${secs} second${secs > 1 ? 's' : ''} ago`;
       } else if (diffMins < 60) {
-        timeStr = `${diffMins} min${diffMins > 1 ? 's' : ''} ago`;
+        timeStr = `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
       } else if (diffHours < 24) {
         timeStr = `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
       } else {
@@ -1294,11 +1296,12 @@ function renderActivityFeed(activities) {
       }
     }
     
+    // Annonymous messaging layout hiding organizational specific data
     if (item.type === 'search') {
       row.innerHTML = `
         <div class="activity-dot"></div>
         <div>
-          <div class="activity-text"><strong>${safeOrgName}</strong> searched for sponsors in <strong>${safeLocation}</strong></div>
+          <div class="activity-text">Sponsors searched for in <strong>${safeLocation}</strong></div>
           <div class="activity-time">${timeStr}</div>
         </div>
       `;
@@ -1306,7 +1309,7 @@ function renderActivityFeed(activities) {
       row.innerHTML = `
         <div class="activity-dot sage"></div>
         <div>
-          <div class="activity-text"><strong>${safeOrgName}</strong> generated an outreach email for <strong>${safeSponsor}</strong></div>
+          <div class="activity-text">Outreach email generated for <strong>${safeSponsor}</strong></div>
           <div class="activity-time">${timeStr}</div>
         </div>
       `;
