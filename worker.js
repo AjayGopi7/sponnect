@@ -87,34 +87,63 @@ export default {
       try {
         const body = await request.json();
         const { type, org_name, org_type, location, sponsor_name } = body;
+
         if (type === 'visit') {
           const current = parseInt(await env.KV.get('stat:visits') || '191');
           await env.KV.put('stat:visits', String(current + 1));
         }
+
         if (type === 'search') {
-          const current = parseInt(await env.KV.get('stat:searches') || '20');
-          await env.KV.put('stat:searches', String(current + 1));
+          // OPTIMIZATION: Fetch existing data bundles concurrently
+          const [citiesRaw, orgTypesRaw, activityRaw, currentSearches] = await Promise.all([
+            env.KV.get('stat:cities'),
+            env.KV.get('stat:orgtypes'),
+            env.KV.get('stat:activity'),
+            env.KV.get('stat:searches')
+          ]);
+
+          const current = parseInt(currentSearches || '20');
+          const cities = JSON.parse(citiesRaw || '[]');
+          const orgTypes = JSON.parse(orgTypesRaw || '{}');
+          const activity = JSON.parse(activityRaw || '[]');
+
+          const promises = [env.KV.put('stat:searches', String(current + 1))];
+
           if (location) {
             const city = location.split(',')[0].trim();
-            const cities = JSON.parse(await env.KV.get('stat:cities') || '[]');
-            if (!cities.includes(city)) { cities.push(city); await env.KV.put('stat:cities', JSON.stringify(cities)); }
+            if (!cities.includes(city)) {
+              cities.push(city);
+              promises.push(env.KV.put('stat:cities', JSON.stringify(cities)));
+            }
           }
           if (org_type) {
-            const orgTypes = JSON.parse(await env.KV.get('stat:orgtypes') || '{}');
             orgTypes[org_type] = (orgTypes[org_type] || 0) + 1;
-            await env.KV.put('stat:orgtypes', JSON.stringify(orgTypes));
+            promises.push(env.KV.put('stat:orgtypes', JSON.stringify(orgTypes)));
           }
-          const activity = JSON.parse(await env.KV.get('stat:activity') || '[]');
+
           activity.unshift({ type: 'search', org_name, location, ts: Date.now() });
-          await env.KV.put('stat:activity', JSON.stringify(activity.slice(0, 20)));
+          promises.push(env.KV.put('stat:activity', JSON.stringify(activity.slice(0, 20))));
+
+          await Promise.all(promises);
         }
+
         if (type === 'email') {
-          const current = parseInt(await env.KV.get('stat:emails') || '15');
-          await env.KV.put('stat:emails', String(current + 1));
-          const activity = JSON.parse(await env.KV.get('stat:activity') || '[]');
+          const [currentEmails, activityRaw] = await Promise.all([
+            env.KV.get('stat:emails'),
+            env.KV.get('stat:activity')
+          ]);
+
+          const current = parseInt(currentEmails || '15');
+          const activity = JSON.parse(activityRaw || '[]');
+          
           activity.unshift({ type: 'email', org_name, sponsor_name, ts: Date.now() });
-          await env.KV.put('stat:activity', JSON.stringify(activity.slice(0, 20)));
+
+          await Promise.all([
+            env.KV.put('stat:emails', String(current + 1)),
+            env.KV.put('stat:activity', JSON.stringify(activity.slice(0, 20)))
+          ]);
         }
+
         return new Response(JSON.stringify({ ok: true }), {
           headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
         });
@@ -138,41 +167,45 @@ export default {
     }
 
     // ─── SERVE HTML WITH SCRIPT INJECTION PROTECTION ───────────
-const response = await env.ASSETS.fetch(request);
-const contentType = response.headers.get('content-type') || '';
+    const response = await env.ASSETS.fetch(request);
+    const contentType = response.headers.get('content-type') || '';
 
-if (contentType.includes('text/html')) {
-  let html = await response.text();
-  
-  // Strip external scripts
-  html = html.replace(/<script\b[^>]*src=["'][^"']*googletagmanager[^"']*["'][^>]*><\/script>/gi, '');
-  html = html.replace(/<script\b[^>]*src=["'][^"']*google-analytics[^"']*["'][^>]*><\/script>/gi, '');
-  
-  // Strip inline GA scripts
-  html = html.replace(/<script\b[^>]*>[\s\S]*?gtag[\s\S]*?<\/script>/gi, '');
-  html = html.replace(/<script\b[^>]*>[\s\S]*?dataLayer[\s\S]*?<\/script>/gi, '');
+    if (contentType.includes('text/html')) {
+      let html = await response.text();
+      
+      // Strip external scripts
+      html = html.replace(/<script\b[^>]*src=["'][^"']*googletagmanager[^"']*["'][^>]*><\/script>/gi, '');
+      html = html.replace(/<script\b[^>]*src=["'][^"']*google-analytics[^"']*["'][^>]*><\/script>/gi, '');
+      
+      // Strip inline GA scripts
+      html = html.replace(/<script\b[^>]*>[\s\S]*?gtag[\s\S]*?<\/script>/gi, '');
+      html = html.replace(/<script\b[^>]*>[\s\S]*?dataLayer[\s\S]*?<\/script>/gi, '');
 
-  // Inject service worker killer before </body>
-  const swKiller = `
-  <script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.getRegistrations().then(function(registrations) {
-      registrations.forEach(function(registration) {
-        registration.unregister();
-        console.log('Killed SW:', registration.scope);
+      // Inject service worker killer before </body>
+      const swKiller = `
+      <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(function(registrations) {
+          registrations.forEach(function(registration) {
+            registration.unregister();
+            console.log('Killed SW:', registration.scope);
+          });
+        });
+      }
+      </script>`;
+      
+      html = html.replace('</body>', swKiller + '</body>');
+      
+      // FIX: Clone headers and strip content-length to prevent truncated page deliveries
+      const newHeaders = new Headers(response.headers);
+      newHeaders.delete('content-length');
+
+      return new Response(html, {
+        status: response.status,
+        headers: newHeaders,
       });
-    });
-  }
-  </script>`;
-  
-  html = html.replace('</body>', swKiller + '</body>');
-  
-  return new Response(html, {
-    status: response.status,
-    headers: response.headers,
-  });
-}
+    }
 
-return response;
+    return response;
   }
 };
