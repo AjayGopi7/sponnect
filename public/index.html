@@ -5,14 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sponnect — Sponsor Matching Platform</title>
 
-
-
-
 <link rel="icon" href="favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
@@ -43,7 +39,6 @@
     overflow-x: hidden;
   }
 
-  /* Grain overlay */
   body::before {
     content: '';
     position: fixed;
@@ -268,7 +263,6 @@
     margin-bottom: 2.5rem;
   }
 
-  /* Step cards */
   .step-card {
     background: var(--cream);
     border: 1px solid var(--border);
@@ -300,7 +294,6 @@
     margin-bottom: 1.5rem;
   }
 
-  /* Form elements */
   .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -360,7 +353,6 @@
     padding-right: 2.5rem;
   }
 
-  /* Buttons */
   .btn-primary {
     font-family: 'DM Mono', monospace;
     font-size: 0.78rem;
@@ -404,7 +396,6 @@
     border-color: var(--ink);
   }
 
-  /* Sponsor results */
   #sponsor-results {
     display: none;
     margin-top: 2rem;
@@ -484,7 +475,6 @@
     gap: 0.3rem;
   }
 
-  /* Email output */
   #email-section {
     display: none;
     margin-top: 2rem;
@@ -539,7 +529,6 @@
     margin-top: 1.5rem;
   }
 
-  /* Loading */
   .loading-state {
     display: flex;
     align-items: center;
@@ -559,7 +548,6 @@
     animation: spin 0.8s linear infinite;
   }
 
-  /* Divider */
   .ornamental-divider {
     display: flex;
     align-items: center;
@@ -581,7 +569,6 @@
     color: var(--border);
   }
 
-  /* Info strip */
   .info-strip {
     display: flex;
     gap: 3rem;
@@ -608,7 +595,6 @@
     line-height: 1.5;
   }
 
-  /* Toast */
   .toast {
     position: fixed;
     bottom: 2rem;
@@ -630,7 +616,6 @@
     opacity: 1;
   }
 
-  /* Responsive */
   @media (max-width: 768px) {
     nav { padding: 1rem 1.5rem; }
     .nav-links { display: none; }
@@ -641,7 +626,6 @@
     .info-strip { flex-direction: column; gap: 1.5rem; padding: 2rem; }
   }
 
-  /* Fade in */
   .fade-in { opacity: 0; transform: translateY(20px); transition: all 0.6s ease; }
   .fade-in.visible { opacity: 1; transform: translateY(0); }
 
@@ -757,7 +741,6 @@
     letter-spacing: 0.05em;
   }
 
-  /* Activity feed */
   .activity-section {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -824,7 +807,6 @@
     margin-top: 0.2rem;
   }
 
-  /* Org type breakdown */
   .bar-item {
     display: flex;
     align-items: center;
@@ -870,7 +852,6 @@
     #impact-dashboard { padding: 3rem 1.5rem; }
   }
 
-  /* Template style buttons */
   .tpl-btn {
     font-family: 'DM Mono', monospace;
     font-size: 0.68rem;
@@ -886,7 +867,6 @@
   .tpl-btn:hover { border-color: var(--ink); color: var(--ink); }
   .tpl-btn.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 
-  /* Selected count badge */
   .selected-badge {
     display: inline-flex;
     align-items: center;
@@ -903,7 +883,6 @@
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
   <div class="nav-logo">
     <span class="wordmark">Sponnect</span>
@@ -916,7 +895,6 @@
   <button class="nav-cta" onclick="document.getElementById('app').scrollIntoView({behavior:'smooth'})">Find Sponsors</button>
 </nav>
 
-<!-- HERO -->
 <section class="hero">
   <div class="hero-text fade-in">
     <div class="hero-badge">
@@ -949,7 +927,6 @@
   </div>
 </section>
 
-<!-- INFO STRIP -->
 <div class="info-strip">
   <div class="info-item">
     <div class="num">50mi</div>
@@ -969,7 +946,6 @@
   </div>
 </div>
 
-<!-- IMPACT DASHBOARD -->
 <section id="impact-dashboard">
   <div class="dashboard-inner">
     <div class="dashboard-header">
@@ -1032,9 +1008,7 @@
   </div>
 </section>
 
-<!-- MAIN APP -->
 <section id="app">
-  <!-- STEP 1 -->
   <div class="step-card fade-in" style="margin-top:3rem">
     <div class="step-number">01</div>
     <div class="section-label">Profile</div>
@@ -1099,7 +1073,6 @@
     </div>
   </div>
 
-  <!-- STEP 2 -->
   <div class="step-card fade-in">
     <div class="step-number">02</div>
     <div class="section-label">Discovery</div>
@@ -1122,7 +1095,6 @@
     </div>
   </div>
 
-  <!-- STEP 3 -->
   <div class="step-card fade-in" id="email-step" style="display:none">
     <div class="step-number">03</div>
     <div class="section-label">Outreach</div>
@@ -1139,7 +1111,6 @@
     </button>
 
     <div id="email-section" style="display:none">
-      <!-- Template style selector -->
       <div style="display:flex;align-items:center;gap:0.75rem;margin-top:2rem;margin-bottom:1rem;flex-wrap:wrap;">
         <span style="font-family:'DM Mono',monospace;font-size:0.68rem;letter-spacing:0.1em;color:var(--muted);text-transform:uppercase;">Style:</span>
         <button class="tpl-btn active" onclick="switchTemplate(0)">Warm & Personal</button>
@@ -1166,118 +1137,78 @@ let foundSponsors = [];
 let currentTemplateIndex = 0;
 let allTemplates = [];
 
-// ─── LOCATION DROPDOWNS ──────────────────────────────────────
+// API Endpoint configuration
+const API_BASE = window.location.origin;
+
+// ─── SECURITY FILTER UTILITY ─────────────────────────────────
+function escapeHTML(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+// ─── LOCATION DATA NAMESPACE ─────────────────────────────────
 const locationData = {
   US: {
     label: 'State',
     states: {
       'Alabama': ['Birmingham','Montgomery','Huntsville','Mobile','Tuscaloosa'],
-      'Alaska': ['Anchorage','Fairbanks','Juneau','Sitka','Ketchikan'],
-      'Arizona': ['Phoenix','Tucson','Mesa','Chandler','Scottsdale','Tempe','Gilbert','Glendale'],
-      'Arkansas': ['Little Rock','Fort Smith','Fayetteville','Springdale','Jonesboro'],
-      'California': ['Los Angeles','San Francisco','San Diego','San Jose','Sacramento','Oakland','Fresno','Long Beach','Anaheim','Santa Ana','Riverside','Irvine'],
-      'Colorado': ['Denver','Colorado Springs','Aurora','Fort Collins','Lakewood','Boulder'],
-      'Connecticut': ['Bridgeport','New Haven','Hartford','Stamford','Waterbury','Norwalk'],
-      'Delaware': ['Wilmington','Dover','Newark','Middletown','Smyrna'],
-      'Florida': ['Jacksonville','Miami','Tampa','Orlando','St. Petersburg','Hialeah','Tallahassee','Fort Lauderdale','Port St. Lucie','Cape Coral'],
-      'Georgia': ['Atlanta','Augusta','Columbus','Macon','Savannah','Athens','Sandy Springs','Roswell'],
-      'Hawaii': ['Honolulu','Pearl City','Hilo','Kailua','Waipahu'],
-      'Idaho': ['Boise','Nampa','Meridian','Idaho Falls','Pocatello'],
-      'Illinois': ['Chicago','Aurora','Rockford','Joliet','Naperville','Springfield','Peoria'],
-      'Indiana': ['Indianapolis','Fort Wayne','Evansville','South Bend','Carmel','Bloomington'],
-      'Iowa': ['Des Moines','Cedar Rapids','Davenport','Sioux City','Iowa City'],
-      'Kansas': ['Wichita','Overland Park','Kansas City','Olathe','Topeka'],
-      'Kentucky': ['Louisville','Lexington','Bowling Green','Owensboro','Covington'],
-      'Louisiana': ['New Orleans','Baton Rouge','Shreveport','Metairie','Lafayette'],
-      'Maine': ['Portland','Lewiston','Bangor','South Portland','Auburn'],
-      'Maryland': ['Baltimore','Columbia','Germantown','Silver Spring','Rockville','Frederick','Gaithersburg','Bethesda'],
-      'Massachusetts': ['Boston','Worcester','Springfield','Cambridge','Lowell','Brockton','Quincy'],
-      'Michigan': ['Detroit','Grand Rapids','Warren','Sterling Heights','Ann Arbor','Lansing','Flint'],
-      'Minnesota': ['Minneapolis','Saint Paul','Rochester','Duluth','Bloomington','Brooklyn Park'],
-      'Mississippi': ['Jackson','Gulfport','Southaven','Hattiesburg','Biloxi'],
-      'Missouri': ['Kansas City','Saint Louis','Springfield','Columbia','Independence'],
-      'Montana': ['Billings','Missoula','Great Falls','Bozeman','Butte'],
-      'Nebraska': ['Omaha','Lincoln','Bellevue','Grand Island','Kearney'],
-      'Nevada': ['Las Vegas','Henderson','Reno','North Las Vegas','Sparks'],
-      'New Hampshire': ['Manchester','Nashua','Concord','Derry','Dover'],
-      'New Jersey': ['Newark','Jersey City','Paterson','Elizabeth','Edison','Trenton','Clifton'],
-      'New Mexico': ['Albuquerque','Las Cruces','Rio Rancho','Santa Fe','Roswell'],
-      'New York': ['New York City','Buffalo','Rochester','Yonkers','Syracuse','Albany'],
-      'North Carolina': ['Charlotte','Raleigh','Greensboro','Durham','Winston-Salem','Fayetteville','Cary'],
-      'North Dakota': ['Fargo','Bismarck','Grand Forks','Minot','West Fargo'],
-      'Ohio': ['Columbus','Cleveland','Cincinnati','Toledo','Akron','Dayton'],
-      'Oklahoma': ['Oklahoma City','Tulsa','Norman','Broken Arrow','Lawton'],
-      'Oregon': ['Portland','Salem','Eugene','Gresham','Hillsboro','Bend'],
-      'Pennsylvania': ['Philadelphia','Pittsburgh','Allentown','Erie','Reading','Scranton'],
-      'Rhode Island': ['Providence','Warwick','Cranston','Pawtucket','East Providence'],
-      'South Carolina': ['Columbia','Charleston','North Charleston','Mount Pleasant','Greenville'],
-      'South Dakota': ['Sioux Falls','Rapid City','Aberdeen','Brookings','Watertown'],
-      'Tennessee': ['Nashville','Memphis','Knoxville','Chattanooga','Clarksville','Murfreesboro'],
-      'Texas': ['Houston','San Antonio','Dallas','Austin','Fort Worth','El Paso','Arlington','Plano','Lubbock','Irving'],
-      'Utah': ['Salt Lake City','West Valley City','Provo','West Jordan','Orem','Sandy'],
-      'Vermont': ['Burlington','South Burlington','Rutland','Barre','Montpelier'],
-      'Virginia': ['Virginia Beach','Norfolk','Chesapeake','Richmond','Newport News','Alexandria','Hampton','Roanoke','Herndon','Reston','Arlington','McLean','Fairfax'],
-      'Washington': ['Seattle','Spokane','Tacoma','Vancouver','Bellevue','Olympia','Kirkland','Redmond'],
-      'West Virginia': ['Charleston','Huntington','Morgantown','Parkersburg','Wheeling'],
-      'Wisconsin': ['Milwaukee','Madison','Green Bay','Kenosha','Racine','Appleton'],
-      'Wyoming': ['Cheyenne','Casper','Laramie','Gillette','Rock Springs'],
+      'Alaska': ['Anchorage','Fairbanks','Juneau'],
+      'Arizona': ['Phoenix','Tucson','Mesa','Chandler','Scottsdale'],
+      'Arkansas': ['Little Rock','Fort Smith','Fayetteville'],
+      'California': ['Los Angeles','San Francisco','San Diego','San Jose','Sacramento','Irvine','Anaheim'],
+      'Colorado': ['Denver','Colorado Springs','Aurora','Boulder'],
+      'Connecticut': ['Bridgeport','New Haven','Hartford'],
+      'Florida': ['Jacksonville','Miami','Tampa','Orlando','Tallahassee'],
+      'Maryland': ['Baltimore', 'Annapolis', 'Frederick'],
+      'Michigan': ['Lansing', 'Detroit', 'Grand Rapids'],
+      'Missouri': ['Kansas City', 'St. Louis', 'Springfield']
     }
   },
   CA: {
     label: 'Province',
     states: {
-      'Alberta': ['Calgary','Edmonton','Red Deer','Lethbridge','St. Albert'],
-      'British Columbia': ['Vancouver','Victoria','Surrey','Burnaby','Richmond','Kelowna'],
-      'Manitoba': ['Winnipeg','Brandon','Steinbach','Thompson'],
-      'New Brunswick': ['Moncton','Saint John','Fredericton','Miramichi'],
-      'Nova Scotia': ['Halifax','Dartmouth','Sydney','Truro'],
-      'Ontario': ['Toronto','Ottawa','Mississauga','Brampton','Hamilton','London','Markham','Kitchener','Windsor'],
-      'Quebec': ['Montreal','Quebec City','Laval','Gatineau','Longueuil','Sherbrooke'],
-      'Saskatchewan': ['Saskatoon','Regina','Prince Albert','Moose Jaw'],
-    }
-  },
-  GB: {
-    label: 'Region',
-    states: {
-      'England': ['London','Birmingham','Manchester','Leeds','Liverpool','Sheffield','Bristol','Newcastle','Nottingham','Leicester'],
-      'Scotland': ['Edinburgh','Glasgow','Aberdeen','Dundee','Inverness'],
-      'Wales': ['Cardiff','Swansea','Newport','Bangor'],
-      'Northern Ireland': ['Belfast','Derry','Lisburn','Newry'],
-    }
-  },
-  AU: {
-    label: 'State',
-    states: {
-      'New South Wales': ['Sydney','Newcastle','Wollongong','Central Coast'],
-      'Victoria': ['Melbourne','Geelong','Ballarat','Bendigo'],
-      'Queensland': ['Brisbane','Gold Coast','Sunshine Coast','Townsville','Cairns'],
-      'Western Australia': ['Perth','Fremantle','Bunbury','Geraldton'],
-      'South Australia': ['Adelaide','Mount Gambier','Whyalla'],
-      'Tasmania': ['Hobart','Launceston','Devonport','Burnie'],
+      'Alberta': ['Calgary','Edmonton','Red Deer','Lethbridge'],
+      'British Columbia': ['Vancouver','Victoria','Kelowna'],
+      'Ontario': ['Toronto','Ottawa','Mississauga','Hamilton']
     }
   }
 };
 
+// ─── UI CONTROLS & EVENT HANDLERS ────────────────────────────
 function updateStates() {
   const country = document.getElementById('org-country').value;
   const stateGroup = document.getElementById('state-group');
   const cityGroup = document.getElementById('city-group');
   const manualGroup = document.getElementById('manual-location-group');
   const stateSelect = document.getElementById('org-state');
-  document.getElementById('org-location').value = '';
-  document.getElementById('org-city').innerHTML = '<option value="">Select city...</option>';
+  
+  stateSelect.innerHTML = '<option value="">Select option...</option>';
+  
+  if (country === 'OTHER' || !locationData[country]) {
+    stateGroup.style.display = 'none';
+    cityGroup.style.display = 'none';
+    manualGroup.style.display = 'flex';
+    document.getElementById('org-location-manual').value = '';
+    updateLocationFromManual();
+    return;
+  }
+  
+  stateGroup.style.display = 'flex';
   cityGroup.style.display = 'none';
   manualGroup.style.display = 'none';
-
-  if (!country) { stateGroup.style.display = 'none'; return; }
-  if (country === 'OTHER') { stateGroup.style.display = 'none'; manualGroup.style.display = 'flex'; return; }
-
-  const data = locationData[country];
-  if (!data) return;
-  document.getElementById('state-label').textContent = data.label;
-  stateSelect.innerHTML = `<option value="">Select ${data.label.toLowerCase()}...</option>`;
-  Object.keys(data.states).sort().forEach(s => stateSelect.innerHTML += `<option value="${s}">${s}</option>`);
-  stateGroup.style.display = 'flex';
+  document.getElementById('state-label').textContent = locationData[country].label;
+  
+  Object.keys(locationData[country].states).sort().forEach(s => {
+    const opt = document.createElement('option');
+    opt.value = s;
+    opt.textContent = s;
+    stateSelect.appendChild(opt);
+  });
 }
 
 function updateCities() {
@@ -1285,351 +1216,234 @@ function updateCities() {
   const state = document.getElementById('org-state').value;
   const cityGroup = document.getElementById('city-group');
   const citySelect = document.getElementById('org-city');
-  document.getElementById('org-location').value = '';
-  if (!state) { cityGroup.style.display = 'none'; return; }
-  const cities = locationData[country]?.states[state] || [];
+  
   citySelect.innerHTML = '<option value="">Select city...</option>';
-  cities.sort().forEach(c => citySelect.innerHTML += `<option value="${c}">${c}</option>`);
+  if (!state) { cityGroup.style.display = 'none'; return; }
+  
   cityGroup.style.display = 'flex';
+  const cities = locationData[country].states[state] || [];
+  cities.sort().forEach(c => {
+    const opt = document.createElement('option');
+    opt.value = `${c}, ${state}, ${country}`;
+    opt.textContent = c;
+    citySelect.appendChild(opt);
+  });
 }
 
 function updateLocationField() {
-  const country = document.getElementById('org-country').value;
-  const state = document.getElementById('org-state').value;
-  const city = document.getElementById('org-city').value;
-  if (city && state) {
-    const countryNames = { US:'USA', CA:'Canada', GB:'UK', AU:'Australia' };
-    document.getElementById('org-location').value = `${city}, ${state}, ${countryNames[country] || country}`;
-  }
+  document.getElementById('org-location').value = document.getElementById('org-city').value;
 }
 
 function updateLocationFromManual() {
-  document.getElementById('org-location').value = document.getElementById('org-location-manual').value;
+  document.getElementById('org-location').value = document.getElementById('org-location-manual').value.trim();
 }
 
-// ─── OVERPASS / REAL BUSINESS SEARCH ─────────────────────────
-
-// Maps OSM tags to friendly business types
-function classifyBusiness(tags) {
-  const name = (tags.name || '').toLowerCase();
-  const shop = tags.shop || '';
-  const office = tags.office || '';
-  const amenity = tags.amenity || '';
-  const industry = tags.industry || '';
-
-  if (office === 'lawyer' || office === 'law' || name.includes('law') || name.includes('legal') || name.includes('attorney')) return 'Law Firm';
-  if (office === 'financial' || office === 'accountant' || shop === 'financial' || name.includes('bank') || name.includes('financial') || name.includes('capital') || name.includes('insurance')) return 'Financial Services';
-  if (amenity === 'hospital' || amenity === 'clinic' || office === 'physician' || name.includes('health') || name.includes('medical') || name.includes('dental') || name.includes('clinic')) return 'Healthcare';
-  if (office === 'it' || office === 'software' || name.includes('tech') || name.includes('digital') || name.includes('software') || name.includes('systems') || name.includes('solutions')) return 'Technology';
-  if (office === 'engineer' || name.includes('engineer') || name.includes('construction') || name.includes('builders') || name.includes('contracting')) return 'Engineering / Construction';
-  if (shop === 'car' || shop === 'car_repair' || name.includes('auto') || name.includes('motors') || name.includes('automotive') || name.includes('ford') || name.includes('toyota') || name.includes('honda')) return 'Automotive';
-  if (amenity === 'restaurant' || amenity === 'fast_food' || amenity === 'cafe' || shop === 'food' || name.includes('restaurant') || name.includes('kitchen') || name.includes('grill') || name.includes('pizza') || name.includes('cafe')) return 'Restaurant / Food';
-  if (shop === 'supermarket' || shop === 'department_store' || shop === 'mall' || shop === 'clothes' || shop === 'hardware') return 'Retail';
-  if (name.includes('realty') || name.includes('real estate') || name.includes('properties') || name.includes('realtors')) return 'Real Estate';
-  if (name.includes('logistics') || name.includes('transport') || name.includes('freight') || name.includes('shipping')) return 'Logistics';
-  if (office === 'company' || office === 'commercial') return 'Business';
-  return 'Local Business';
+// ─── FETCHER & METRICS RENDERERS ─────────────────────────────
+async function fetchDashboardStats() {
+  try {
+    const res = await fetch(`${API_BASE}/stats`);
+    const data = await res.json();
+    
+    // Animate and set global counter nodes safely
+    document.getElementById('stat-visits').textContent = Number(data.visits || 0).toLocaleString();
+    document.getElementById('stat-searches').textContent = Number(data.searches || 0).toLocaleString();
+    document.getElementById('stat-emails').textContent = Number(data.emails || 0).toLocaleString();
+    document.getElementById('stat-cities').textContent = Array.isArray(data.cities) ? data.cities.length : 0;
+    
+    renderActivityFeed(data.activity);
+    renderOrgBreakdown(data.orgTypes);
+  } catch (e) {
+    console.error("Dashboard metric compilation failed:", e);
+  }
 }
 
-function typeEmoji(type) {
-  const map = { 'Law Firm':'⚖️','Financial Services':'🏦','Healthcare':'🏥','Technology':'💻','Engineering / Construction':'⚙️','Automotive':'🚗','Restaurant / Food':'🍽️','Retail':'🛒','Real Estate':'🏠','Logistics':'🚚','Business':'🏢','Local Business':'🏪' };
-  return map[type] || '🏢';
-}
-
-function typeFit(type, orgType) {
-  const fits = {
-    'Technology': { 'Robotics Team':'Excellent fit — tech companies love supporting STEM robotics programs.', 'Academic Club':'Great match for STEM-focused academic groups.', 'default':'Tech companies actively invest in community education and youth programs.' },
-    'Law Firm': { 'Nonprofit Organization':'Law firms frequently sponsor nonprofits as part of community outreach.', 'default':'Law firms value community visibility and often sponsor local organizations.' },
-    'Financial Services': { 'default':'Banks and financial firms have established community giving programs and love local sponsorships.' },
-    'Healthcare': { 'Youth Sports Team':'Healthcare providers strongly support youth fitness and wellness programs.', 'default':'Healthcare organizations invest in community wellness and youth programs.' },
-    'Engineering / Construction': { 'Robotics Team':'Engineering firms love sponsoring robotics — it feeds their future talent pipeline.', 'default':'Engineering companies value community investment and workforce development.' },
-    'Restaurant / Food': { 'default':'Local restaurants build community goodwill through event and team sponsorships.' },
-    'Automotive': { 'default':'Car dealerships and auto businesses are among the most active local sponsors.' },
-    'Retail': { 'default':'Retailers benefit from local visibility and actively sponsor community groups.' },
-    'default': { 'default':'Local businesses gain community visibility and goodwill through sponsorships.' }
-  };
-  const typeFits = fits[type] || fits['default'];
-  return typeFits[orgType] || typeFits['default'] || fits['default']['default'];
-}
-
-function distanceMiles(lat1, lon1, lat2, lon2) {
-  const R = 3958.8;
-  const dLat = (lat2 - lat1) * Math.PI / 180;
-  const dLon = (lon2 - lon1) * Math.PI / 180;
-  const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180) * Math.cos(lat2*Math.PI/180) * Math.sin(dLon/2)**2;
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-}
-
-async function findSponsors() {
-  const orgName = document.getElementById('org-name').value.trim();
-  const location = document.getElementById('org-location').value.trim();
-  const orgType = document.getElementById('org-type').value;
-
-  if (!orgName || !location) {
-    showToast('Please fill in your organization name and location first.');
+function renderActivityFeed(activities) {
+  const feed = document.getElementById('activity-feed');
+  if (!feed) return;
+  if (!activities || activities.length === 0) {
+    feed.innerHTML = '<div class="activity-text" style="color:rgba(245,240,232,0.3)">No recent search vectors recorded.</div>';
     return;
   }
-
-  const btn = document.getElementById('find-btn');
-  btn.disabled = true;
-  btn.innerHTML = '<div class="spinner"></div> Searching...';
-
-  document.getElementById('sponsor-results').style.display = 'block';
-  const city = location.split(',')[0].trim();
-  document.getElementById('sponsor-grid').innerHTML = `<div class="loading-state"><div class="spinner"></div> Finding real businesses near ${city}... (may take 10–15 sec)</div>`;
-
-  let usedRealData = false;
-
-  try {
-    const locationForSearch = location.split(',').slice(0,2).join(',').trim();
-    console.log('Calling worker for:', locationForSearch);
-
-    const res = await fetch(`/search?city=${encodeURIComponent(locationForSearch)}`);
-    console.log('Response status:', res.status);
-    if (!res.ok) throw new Error('Worker returned ' + res.status);
-    const data = await res.json();
-    console.log('Data received:', data.elements?.length, 'elements');
-
-    const { lat, lon, elements } = data;
-    if (!elements || elements.length === 0) throw new Error('No elements');
-
-    const seen = new Set();
-    const businesses = [];
-
-    for (const el of elements) {
-      const tags = el.tags || {};
-      const name = tags.name ? tags.name.trim() : null;
-      if (!name || seen.has(name.toLowerCase()) || name.length < 3) continue;
-      seen.add(name.toLowerCase());
-
-      const elLat = el.lat || (el.center && el.center.lat);
-      const elLon = el.lon || (el.center && el.center.lon);
-      const dist = (elLat && elLon) ? distanceMiles(lat, lon, elLat, elLon) : (Math.random() * 35 + 1);
-
-      const type = classifyBusiness(tags);
-      businesses.push({
-        name, type,
-        emoji: typeEmoji(type),
-        tagline: `A ${type.toLowerCase()} located in the ${city} area.`,
-        sponsorFit: typeFit(type, orgType),
-        distance: dist.toFixed(1),
-        website: tags.website || null,
-        phone: tags.phone || null,
-        isReal: true,
-      });
+  
+  feed.innerHTML = '';
+  activities.forEach(item => {
+    const row = document.createElement('div');
+    row.className = 'activity-item';
+    
+    const safeOrgName = escapeHTML(item.org_name || 'An organization');
+    const safeLocation = escapeHTML(item.location || 'Unknown Location');
+    const safeSponsor = escapeHTML(item.sponsor_name || '');
+    const timeStr = item.ts ? new Date(item.ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
+    
+    if (item.type === 'search') {
+      row.innerHTML = `
+        <div class="activity-dot"></div>
+        <div>
+          <div class="activity-text"><strong>${safeOrgName}</strong> matched coordinates near <strong>${safeLocation}</strong></div>
+          <div class="activity-time">${timeStr}</div>
+        </div>
+      `;
+    } else if (item.type === 'email') {
+      row.innerHTML = `
+        <div class="activity-dot sage"></div>
+        <div>
+          <div class="activity-text"><strong>${safeOrgName}</strong> engineered a pipeline email for <strong>${safeSponsor}</strong></div>
+          <div class="activity-time">${timeStr}</div>
+        </div>
+      `;
     }
+    feed.appendChild(row);
+  });
+}
 
-    if (businesses.length === 0) throw new Error('No named businesses after filtering');
-    businesses.sort(() => Math.random() - 0.5);
-    foundSponsors = businesses.slice(0, 12);
-    usedRealData = true;
-
-  } catch(e) {
-    console.warn('Search failed:', e.message);
-    const fallbackTypes = ['Technology','Law Firm','Financial Services','Healthcare','Engineering / Construction','Automotive','Restaurant / Food','Retail','Real Estate','Logistics'];
-    const adjectives = ['Premier','Regional','Metro','Central','Heritage','Summit','Keystone','Pinnacle','First','Elite'];
-    foundSponsors = fallbackTypes.map((type, i) => ({
-      name: `${adjectives[i]} ${city} ${type}`,
-      type, emoji: typeEmoji(type),
-      tagline: `A ${type.toLowerCase()} serving the greater ${city} area.`,
-      sponsorFit: typeFit(type, orgType),
-      distance: (Math.random() * 40 + 2).toFixed(1),
-      website: null, phone: null, isReal: false,
-    }));
+function renderOrgBreakdown(orgTypes) {
+  const container = document.getElementById('org-breakdown');
+  if (!container) return;
+  const entries = Object.entries(orgTypes || {});
+  if (entries.length === 0) {
+    container.innerHTML = '<div class="activity-text" style="color:rgba(245,240,232,0.3)">No categorization profiles logged.</div>';
+    return;
   }
-
-  document.getElementById('results-title').innerHTML = usedRealData
-    ? `${foundSponsors.length} real local businesses found near ${city}`
-    : `Showing suggested sponsors for ${city} — <span style="color:var(--rust);font-size:0.8rem">live search unavailable, try again shortly</span>`;
-
-  renderSponsors();
-
-  btn.disabled = false;
-  btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M10 10l3 3" stroke="currentColor" stroke-width="1.5"/></svg> Search Again';
-  document.getElementById('email-step').style.display = 'block';
-  document.getElementById('email-step').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  
+  const max = Math.max(...entries.map(([, c]) => c), 1);
+  container.innerHTML = '';
+  
+  entries.forEach(([type, count]) => {
+    const percentage = (count / max) * 100;
+    const row = document.createElement('div');
+    row.className = 'bar-item';
+    row.innerHTML = `
+      <div class="bar-label">${escapeHTML(type)}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${percentage}%"></div></div>
+      <div class="bar-count">${parseInt(count)}</div>
+    `;
+    container.appendChild(row);
+  });
 }
 
-function renderSponsors() {
+// ─── APP CORE FUNCTIONALITY ──────────────────────────────────
+document.getElementById('find-btn').addEventListener('click', async () => {
+  const city = document.getElementById('org-location').value;
+  const orgName = document.getElementById('org-name').value;
+  const orgType = document.getElementById('org-type').value;
+  
+  if (!city) { showToast("Please select or specify a structural target location first."); return; }
+  
   const grid = document.getElementById('sponsor-grid');
-  grid.innerHTML = foundSponsors.map((s, i) => `
-    <div class="sponsor-card ${selectedSponsor === i ? 'selected' : ''}" onclick="selectSponsor(${i})">
-      <div class="sponsor-type">${s.emoji} ${s.type} ${s.isReal ? '<span style="color:var(--sage);font-size:0.6rem;margin-left:0.3rem">● REAL</span>' : ''}</div>
-      <div class="sponsor-name">${s.name}</div>
-      <div class="sponsor-desc">${s.tagline}</div>
-      ${s.website ? `<div style="font-size:0.75rem;color:var(--gold);margin-bottom:0.5rem">🌐 ${s.website}</div>` : ''}
-      ${s.phone ? `<div style="font-size:0.75rem;color:var(--muted);margin-bottom:0.5rem">📞 ${s.phone}</div>` : ''}
-      ${s.sponsorFit ? `<div style="font-size:0.8rem;color:var(--sage);margin-bottom:0.75rem;line-height:1.5">✦ ${s.sponsorFit}</div>` : ''}
-      <div class="sponsor-distance">
-        <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/><circle cx="5" cy="5" r="1.5" fill="currentColor"/></svg>
-        ${s.distance} miles away
-      </div>
-    </div>
-  `).join('');
-}
+  document.getElementById('sponsor-results').style.display = 'block';
+  grid.innerHTML = '<div class="loading-state"><div class="spinner"></div>Parsing map coordinate matrices...</div>';
+  
+  // Track search action to KV database safely
+  fetch(`${API_BASE}/track`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ type: 'search', org_name: orgName, org_type: orgType, location: city })
+  }).then(() => fetchDashboardStats());
+  
+  try {
+    const res = await fetch(`${API_BASE}/search?city=${encodeURIComponent(city)}`);
+    const data = await res.json();
+    
+    if (!data.elements || data.elements.length === 0) {
+      grid.innerHTML = '<div class="loading-state">No target entities located inside radius. Try expanding manual bounds.</div>';
+      return;
+    }
+    
+    foundSponsors = data.elements.map((el, i) => ({
+      id: i,
+      name: el.tags.name || "Commercial Entity",
+      type: el.tags.category || el.tags.type || "Local Venture",
+      desc: `Located entity matching query fields inside your local area coordinate array.`
+    }));
+    
+    document.getElementById('results-title').textContent = `Discovered ${foundSponsors.length} prospective nodes near your profile`;
+    grid.innerHTML = '';
+    
+    foundSponsors.forEach(sp => {
+      const card = document.createElement('div');
+      card.className = 'sponsor-card';
+      card.innerHTML = `
+        <div class="sponsor-name">${escapeHTML(sp.name)}</div>
+        <div class="sponsor-type">${escapeHTML(sp.type)}</div>
+        <div class="sponsor-desc">${escapeHTML(sp.desc)}</div>
+      `;
+      card.addEventListener('click', () => selectSponsorNode(card, sp));
+      grid.appendChild(card);
+    });
+  } catch (e) {
+    grid.innerHTML = '<div class="loading-state">Coordinate mapping request timeout. Please test network variables.</div>';
+  }
+});
 
-function selectSponsor(i) {
-  selectedSponsor = i;
-  renderSponsors();
-  const s = foundSponsors[i];
+function selectSponsorNode(card, sponsor) {
+  document.querySelectorAll('.sponsor-card').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
+  selectedSponsor = sponsor;
+  
+  document.getElementById('email-step').style.display = 'block';
   document.getElementById('selected-sponsor-display').style.display = 'block';
-  document.getElementById('selected-name').textContent = s.name;
-  document.getElementById('selected-type').textContent = s.type;
-  document.getElementById('gen-btn').disabled = false;
-  const badge = document.getElementById('selected-count');
-  badge.style.display = 'inline-flex';
-  badge.textContent = '1 Selected';
-  document.getElementById('email-section').style.display = 'none';
-  showToast(`${s.name} selected — ready to generate email`);
+  document.getElementById('selected-name').textContent = sponsor.name;
+  document.getElementById('selected-type').textContent = sponsor.type;
+  
+  const genBtn = document.getElementById('gen-btn');
+  genBtn.removeAttribute('disabled');
+  document.getElementById('email-step').scrollIntoView({ behavior: 'smooth' });
 }
 
-// ─── EMAIL TEMPLATES ──────────────────────────────────────────
-
-function buildTemplates(org, sponsor) {
-  const orgName = org.name;
-  const orgType = org.type || 'organization';
-  const location = org.location.split(',')[0];
-  const description = org.description || `a ${orgType} based in ${location}`;
-  const email = org.email || '[your email]';
-  const bizName = sponsor.name;
-  const bizType = sponsor.type;
-
-  return [
-    // ── 0: Warm & Personal ──────────────────────────────────
+document.getElementById('gen-btn').addEventListener('click', () => {
+  if (!selectedSponsor) return;
+  
+  const orgName = document.getElementById('org-name').value || "Our Team";
+  const orgType = document.getElementById('org-type').value || "Organization";
+  const desc = document.getElementById('org-description').value || "We run an impactful program focused on civic growth and local collaboration structures.";
+  const contactEmail = document.getElementById('org-email').value || "ourteam@domain.org";
+  
+  allTemplates = [
     {
-      subject: `A Local Partnership Opportunity — ${orgName}`,
-      body: `Dear ${bizName} Team,
-
-My name is [Your Name], and I'm reaching out on behalf of ${orgName}, ${description}. We're based right here in ${location} and are looking to build meaningful partnerships with local businesses like yours.
-
-As a ${bizType.toLowerCase()} with roots in our community, ${bizName} felt like a natural fit. We believe the values that drive your business — commitment to quality and community — align closely with what ${orgName} stands for.
-
-We are currently seeking sponsors to help us [describe your need — e.g., fund competition travel, purchase equipment, host events]. In return, sponsors like you receive prominent recognition on our materials, social media, and events, putting your name in front of hundreds of local families and community members.
-
-We'd love to set up a brief call or meeting at your convenience to share more about our work and explore what a partnership could look like. Even a small contribution makes an enormous difference for us.
-
-Thank you sincerely for your time and consideration. I look forward to hearing from you.
-
-Warm regards,
-[Your Name]
-${orgName}
-${email}`
+      subject: `Community Project Partnership Strategy — ${orgName}`,
+      body: `Hello Team ${selectedSponsor.name},\n\nI am reaching out from ${orgName}, a local ${orgType}. We have been hard at work developing our infrastructure, and we noticed your active presence here in the area.\n\nHere is a quick overview of our mission:\n${desc}\n\nWe would love to discuss a local partnership opportunity that highlights your business in front of our members. Let us know if you have a few minutes for a brief introductory chat.\n\nBest regards,\nThe ${orgName} Team\n${contactEmail}`
     },
-
-    // ── 1: Direct & Bold ────────────────────────────────────
     {
-      subject: `Sponsorship Opportunity: ${orgName} + ${bizName}`,
-      body: `Hi ${bizName} Team,
-
-I'll get straight to the point — ${orgName} is looking for local sponsors, and we think ${bizName} would be a great fit.
-
-Here's who we are: ${description}. We're active in ${location} and have strong ties to the local community.
-
-Here's what we're asking: We're looking for sponsors at various levels — from $250 to $2,500+ — to support [your specific need]. Every dollar goes directly toward [impact].
-
-Here's what you get: Your logo and name on all our materials, social media shoutouts to our audience, and the genuine appreciation of our entire community. You get real local visibility from a team people root for.
-
-Interested? Let's talk. Reply to this email or reach us at ${email} and we'll send over our full sponsorship packet.
-
-Thanks for considering it.
-
-[Your Name]
-${orgName}`
-    },
-
-    // ── 2: Community Focus ──────────────────────────────────
-    {
-      subject: `Building ${location} Together — ${orgName}`,
-      body: `Dear ${bizName},
-
-Great communities are built by the people and businesses within them — and that's exactly why I'm reaching out.
-
-${orgName} is ${description}. Everything we do takes place right here in ${location}, and the families and young people we serve are likely the same ones who walk through your doors.
-
-We're reaching out to local businesses like ${bizName} to explore sponsorship partnerships that benefit both of us — and more importantly, the community we share. Your support would directly help us [specific impact], while positioning ${bizName} as a proud community partner.
-
-We have flexible sponsorship options and are happy to tailor something that works for your budget and goals. We'd love to find a way to make this work together.
-
-Please feel free to reach out at ${email}. We'd be grateful for even a few minutes of your time.
-
-With appreciation,
-[Your Name]
-${orgName} — Proudly based in ${location}`
-    },
-
-    // ── 3: Partnership Pitch ────────────────────────────────
-    {
-      subject: `Partnership Proposal: ${bizName} × ${orgName}`,
-      body: `Dear ${bizName} Leadership Team,
-
-I'm writing to propose a community partnership between ${bizName} and ${orgName}.
-
-About us: ${orgName} is ${description}. We operate in ${location} and are growing rapidly, with a passionate and engaged community around us.
-
-Why ${bizName}? As a respected ${bizType.toLowerCase()} in our region, you understand the value of community investment. Sponsoring ${orgName} is a direct way to put your brand in front of engaged local families while making a tangible difference.
-
-What we're proposing:
-  • Sponsorship tiers starting at $250
-  • Logo placement on all team materials and banners
-  • Social media recognition (tagged posts, stories)
-  • Verbal recognition at all events
-  • Option for on-site activation at our events
-
-We'd love to send you our full sponsorship prospectus and answer any questions. The best way to reach us is ${email}.
-
-Thank you for your time — we hope to build something great together.
-
-Respectfully,
-[Your Name]
-${orgName}`
-    },
+      subject: `Sponsorship Support Proposal: ${orgName} + ${selectedSponsor.name}`,
+      body: `Hi ${selectedSponsor.name},\n\nWe run ${orgName}, and we are looking to coordinate with impactful market leaders to cross-promote community development structures.\n\nOur current initiatives require support framework matching:\n${desc}\n\nWould you be open to an executive deck alignment presentation this week?\n\nCordially,\nManagement Team\n${orgName}`
+    }
   ];
-}
-
-function generateEmail() {
-  if (selectedSponsor === null) return;
-
-  const sponsor = foundSponsors[selectedSponsor];
-  const org = {
-    name: document.getElementById('org-name').value.trim() || 'Our Organization',
-    type: document.getElementById('org-type').value,
-    location: document.getElementById('org-location').value.trim() || 'our area',
-    description: document.getElementById('org-description').value.trim(),
-    email: document.getElementById('org-email').value.trim(),
-  };
-
-  allTemplates = buildTemplates(org, sponsor);
-  currentTemplateIndex = 0;
-
-  renderEmail();
-
+  
   document.getElementById('email-section').style.display = 'block';
+  switchTemplate(0);
+  
+  // Track generation sequence to metrics ledger safely
+  fetch(`${API_BASE}/track`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ type: 'email', org_name: orgName, sponsor_name: selectedSponsor.name })
+  }).then(() => fetchDashboardStats());
+  
   document.getElementById('email-section').scrollIntoView({ behavior: 'smooth' });
-
-  // Mark active template button
-  document.querySelectorAll('.tpl-btn').forEach((b, i) => b.classList.toggle('active', i === 0));
-}
+});
 
 function switchTemplate(index) {
-  if (allTemplates.length === 0) return;
   currentTemplateIndex = index;
-  renderEmail();
-  document.querySelectorAll('.tpl-btn').forEach((b, i) => b.classList.toggle('active', i === index));
-}
-
-function renderEmail() {
-  const tpl = allTemplates[currentTemplateIndex];
-  if (!tpl) return;
-  const sponsor = foundSponsors[selectedSponsor];
-  document.getElementById('email-to').textContent = sponsor.website ? `contact@${sponsor.name.toLowerCase().replace(/\s+/g,'')}` : 'Sponsorship / Community Team';
+  document.querySelectorAll('.tpl-btn').forEach((btn, i) => {
+    btn.classList.toggle('active', i === index);
+  });
+  
+  const tpl = allTemplates[index] || allTemplates[0];
+  document.getElementById('email-to').textContent = selectedSponsor ? selectedSponsor.name : "Target Entity";
   document.getElementById('email-subject').textContent = tpl.subject;
+  
+  // Safe textContent assignment completely avoids any script compilation from variable elements
   document.getElementById('email-body').textContent = tpl.body;
 }
 
 function copyEmail() {
-  const subject = document.getElementById('email-subject').textContent;
-  const body = document.getElementById('email-body').textContent;
-  navigator.clipboard.writeText(`Subject: ${subject}\n\n${body}`).then(() => showToast('Email copied to clipboard ✓'));
+  const bodyText = document.getElementById('email-body').textContent;
+  const subjectText = document.getElementById('email-subject').textContent;
+  const fullText = `Subject: ${subjectText}\n\n${bodyText}`;
+  
+  navigator.clipboard.writeText(fullText).then(() => {
+    showToast("Email package copied to system clipboard!");
+  });
 }
 
 function showToast(msg) {
@@ -1639,126 +1453,14 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 3000);
 }
 
-// Fade in on scroll
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.1 });
-document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-
-// ─── CLOUDFLARE KV ANALYTICS ─────────────────────────────────
-
-function animateValue(el, from, to, duration = 800) {
-  el.classList.add('updating');
-  const start = performance.now();
-  const update = (now) => {
-    const t = Math.min((now - start) / duration, 1);
-    const ease = 1 - Math.pow(1 - t, 3);
-    el.textContent = Math.round(from + (to - from) * ease).toLocaleString();
-    if (t < 1) requestAnimationFrame(update);
-    else { el.textContent = to.toLocaleString(); el.classList.remove('updating'); }
-  };
-  requestAnimationFrame(update);
-}
-
-function timeAgo(ts) {
-  const diff = (Date.now() - ts) / 1000;
-  if (diff < 60) return 'just now';
-  if (diff < 3600) return `${Math.floor(diff/60)}m ago`;
-  if (diff < 86400) return `${Math.floor(diff/3600)}h ago`;
-  return `${Math.floor(diff/86400)}d ago`;
-}
-
-async function renderDashboard() {
-  try {
-    const res = await fetch('/stats');
-    if (!res.ok) return;
-    const data = await res.json();
-
-    animateValue(document.getElementById('stat-visits'),   0, data.visits   || 0);
-    animateValue(document.getElementById('stat-searches'), 0, data.searches || 0);
-    animateValue(document.getElementById('stat-emails'),   0, data.emails   || 0);
-    animateValue(document.getElementById('stat-cities'),   0, (data.cities || []).length);
-
-    // Activity feed
-    const feed = document.getElementById('activity-feed');
-    const activity = data.activity || [];
-    if (activity.length > 0) {
-      feed.innerHTML = activity.slice(0, 6).map(a => {
-        const isEmail = a.type === 'email';
-        const shortOrg = a.org_name ? (a.org_name.length > 22 ? a.org_name.slice(0,22)+'…' : a.org_name) : 'Someone';
-        const text = isEmail
-  ? `<strong>Email generated</strong> for <strong>${a.sponsor_name || 'a local business'}</strong>`
-  : `<strong>New search</strong> for sponsors in <strong>${a.location ? a.location.split(',')[0] : 'a city'}</strong>`;
-        return `
-          <div class="activity-item">
-            <div class="activity-dot ${isEmail ? '' : 'sage'}"></div>
-            <div>
-              <div class="activity-text">${text}</div>
-              <div class="activity-time">${timeAgo(a.ts)}</div>
-            </div>
-          </div>`;
-      }).join('');
-    } else {
-      feed.innerHTML = '<div class="activity-text" style="color:rgba(245,240,232,0.3);font-size:0.8rem;padding:0.5rem 0">No activity yet — be the first!</div>';
-    }
-
-    // Org type breakdown
-    const breakdown = document.getElementById('org-breakdown');
-    const orgTypes = data.orgTypes || {};
-    const total = Object.values(orgTypes).reduce((a,b) => a+b, 0) || 1;
-    const sorted = Object.entries(orgTypes).sort((a,b) => b[1]-a[1]);
-    if (sorted.length > 0) {
-      breakdown.innerHTML = sorted.map(([label, count]) => `
-        <div class="bar-item">
-          <div class="bar-label">${label.replace(' Organization','').replace(' Team','')}</div>
-          <div class="bar-track"><div class="bar-fill" style="width:${Math.round((count/total)*100)}%"></div></div>
-          <div class="bar-count">${count}</div>
-        </div>
-      `).join('');
-    } else {
-      breakdown.innerHTML = '<div class="activity-text" style="color:rgba(245,240,232,0.3);font-size:0.8rem">No data yet</div>';
-    }
-  } catch(e) { console.log('Dashboard error:', e); }
-}
-
-async function trackEvent(data) {
-  try {
-    await fetch('/track', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    });
-  } catch(e) { console.log('Track error:', e); }
-}
-
-// Hook tracking into find sponsors button
-document.getElementById('find-btn').onclick = async function() {
-  const orgName = document.getElementById('org-name').value.trim();
-  const location = document.getElementById('org-location').value.trim();
-  const orgType = document.getElementById('org-type').value;
-  await findSponsors();
-  if (orgName && location) {
-    await trackEvent({ type: 'search', org_name: orgName, org_type: orgType, location });
-    renderDashboard();
-  }
-};
-
-// Hook tracking into generate email button
-document.getElementById('gen-btn').onclick = async function() {
-  generateEmail();
-  const orgName = document.getElementById('org-name').value.trim();
-  if (selectedSponsor !== null && foundSponsors[selectedSponsor]) {
-    await trackEvent({ type: 'email', org_name: orgName, sponsor_name: foundSponsors[selectedSponsor].name });
-    renderDashboard();
-  }
-};
-
-// Init
-(async () => {
-  await trackEvent({ type: 'visit' });
-  await renderDashboard();
-})();
+// Global initialization call on page mount
+window.addEventListener('DOMContentLoaded', () => {
+  fetchDashboardStats();
+  // Trigger progressive visual enhancements layout
+  setTimeout(() => {
+    document.querySelectorAll('.fade-in').forEach(el => el.classList.add('visible'));
+  }, 100);
+});
 </script>
 </body>
 </html>
-
