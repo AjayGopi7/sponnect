@@ -1131,11 +1131,13 @@ function escapeHTML(str) {
     .replace(/'/g, '&#39;');
 }
 
-if (!res.ok) throw new Error("Search failed");
 // ─── FETCHER & METRICS RENDERERS ─────────────────────────────
 async function fetchDashboardStats() {
   try {
     const res = await fetch(`${API_BASE}/stats`);
+
+    if (!res.ok) throw new Error("Search failed");
+    
     const data = await res.json();
     
     // Animate and set global counter nodes safely
