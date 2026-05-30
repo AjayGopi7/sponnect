@@ -1384,6 +1384,12 @@ function showToast(msg) {
 
 // Global initialization call on page mount
 window.addEventListener('DOMContentLoaded', () => {
+  // Track visit
+  fetch(`${API_BASE}/track`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ type: 'visit' })
+  });
   fetchDashboardStats();
   // Trigger progressive visual enhancements layout
   setTimeout(() => {
